@@ -1,0 +1,106 @@
+services:
+  faaslight_original:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: faaslight_project_new/faaslight_original
+    container_name: faaslight_project_new-faaslight_original-1
+    ports:
+      - "32768:5000"
+    environment:
+      - FLASK_APP=app.py
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+    networks:
+      - faaslight-net
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '512M'
+  faaslight_enhanced:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: faaslight_project_new/faaslight_enhanced
+    container_name: faaslight_project_new-faaslight_enhanced-1
+    ports:
+      - "32769:5000"  # Use static port for simplicity
+    environment:
+      - FLASK_APP=app.py
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+    networks:
+      - faaslight-net
+    deploy:
+      replicas: 1  # Single replica
+      resources:
+        limits:
+          cpus: '0.75'
+          memory: '768M'
+  sand_plus:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: faaslight_project_new/sand_plus
+    container_name: faaslight_project_new-sand_plus-1
+    ports:
+      - "32770:5000"
+    environment:
+      - FLASK_APP=app.py
+    networks:
+      - faaslight-net
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '512M'
+  fargate_inspired:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: faaslight_project_new/fargate_inspired
+    container_name: faaslight_project_new-fargate_inspired-1
+    ports:
+      - "32771:5000"
+    environment:
+      - FLASK_APP=app.py
+    networks:
+      - faaslight-net
+    deploy:
+      resources:
+        limits:
+          cpus: '0.6'
+          memory: '640M'
+  unikernel_inspired:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: faaslight_project_new/unikernel_inspired
+    container_name: faaslight_project_new-unikernel_inspired-1
+    ports:
+      - "32772:5000"
+    environment:
+      - FLASK_APP=app.py
+    networks:
+      - faaslight-net
+    deploy:
+      resources:
+        limits:
+          cpus: '0.4'
+          memory: '384M'
+networks:
+  faaslight-net:
+    driver: bridge
